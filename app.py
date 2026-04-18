@@ -1,18 +1,21 @@
-from flask import Flask,request,render_template
+from flask import Flask, request, render_template
 import numpy as np
 import pandas as pd
 import pickle
+import os
 
-dtr = pickle.load(open('dtr.pkl','rb'))
-preprocessor = pickle.load(open('preprocessor.pkl','rb'))
+dtr = pickle.load(open('dtr.pkl', 'rb'))
+preprocessor = pickle.load(open('preprocessor.pkl', 'rb'))
 
-app=Flask(__name__)
+app = Flask(__name__)
+
 @app.route('/')
 def index():
     return render_template('index.html')
-@app.route('/predict',methods =['POST'])
+
+@app.route('/predict', methods=['POST'])
 def predict():
-    if request.method =='POST':
+    if request.method == 'POST':
         Year = request.form['Year']
         average_rain_fall_mm_per_year = request.form['average_rain_fall_mm_per_year']
         pesticides_tonnes = request.form['pesticides_tonnes']
@@ -20,11 +23,18 @@ def predict():
         Area = request.form['Area']
         Item = request.form['Item']
 
-        features = np.array([[Year,average_rain_fall_mm_per_year,pesticides_tonnes,avg_temp,Area,Item]])
+        features = np.array([[Year,
+                              average_rain_fall_mm_per_year,
+                              pesticides_tonnes,
+                              avg_temp,
+                              Area,
+                              Item]])
 
         transformed_features = preprocessor.transform(features)
-        predicted_value = dtr.predict(transformed_features).reshape(1,-1)
+        predicted_value = dtr.predict(transformed_features).reshape(1, -1)
 
-        return render_template('index.html',predicted_value=predicted_value) 
-if __name__=='__main__':
-    app.run(debug=True)
+        return render_template('index.html', predicted_value=predicted_value)
+
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)

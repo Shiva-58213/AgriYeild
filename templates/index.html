@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AgriYield Predictor</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background: linear-gradient(135deg, #2e7d32, #81c784);
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .card {
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .form-control {
+      border-radius: 10px;
+    }
+
+    .btn-custom {
+      background: linear-gradient(45deg, #ff5722, #ff9800);
+      border: none;
+      border-radius: 12px;
+      color: white;
+    }
+
+    .btn-custom:hover {
+      background: linear-gradient(45deg, #e64a19, #f57c00);
+    }
+
+    .result-box {
+      background: #f1f8e9;
+      border-radius: 12px;
+      padding: 15px;
+      text-align: center;
+      color: #33691e;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container py-5">
+
+  <h1 class="text-center text-white mb-4">
+    🌾 Agricultural Yield Forecasting
+  </h1>
+
+  <div class="card p-4">
+
+    <h5 class="text-center text-success mb-4">
+      Enter Input Parameters
+    </h5>
+
+    <form action="/predict" method="POST">
+
+      <div class="row g-3">
+
+        <!-- Year (INTEGER ONLY) -->
+        <div class="col-md-6">
+          <label class="form-label">📅 Year</label>
+          <input type="number" class="form-control" name="Year" step="1" required>
+        </div>
+
+        <!-- Rainfall -->
+        <div class="col-md-6">
+          <label class="form-label">🌧 Rainfall (mm/year)</label>
+          <input type="number" class="form-control" name="average_rain_fall_mm_per_year" step="any" required>
+        </div>
+
+        <!-- Pesticides -->
+        <div class="col-md-6">
+          <label class="form-label">🧪 Pesticide Usage (tonnes)</label>
+          <input type="number" class="form-control" name="pesticides_tonnes" step="any" required>
+        </div>
+
+        <!-- Temperature -->
+        <div class="col-md-6">
+          <label class="form-label">🌡 Average Temperature (°C)</label>
+          <input type="number" class="form-control" name="avg_temp" step="any" required>
+        </div>
+
+        <!-- Area -->
+        <div class="col-md-6">
+          <label class="form-label">🌍 Region</label>
+          <input type="text" class="form-control" name="Area" placeholder="e.g., India" required>
+        </div>
+
+        <!-- Crop -->
+        <div class="col-md-6">
+          <label class="form-label">🌱 Crop</label>
+          <input type="text" class="form-control" name="Item" placeholder="e.g., Rice" required>
+        </div>
+
+      </div>
+
+      <div class="text-center mt-4">
+        <button type="submit" class="btn btn-custom btn-lg px-5">
+          🚀 Predict Yield
+        </button>
+      </div>
+
+    </form>
+
+    {% if predicted_value %}
+    <div class="result-box mt-4">
+      <strong>📊 Predicted Yield:</strong><br>
+      {{ predicted_value }}
+    </div>
+    {% endif %}
+
+  </div>
+
+</div>
+
+</body>
+</html>
